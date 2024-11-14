@@ -1,9 +1,9 @@
 package com.example.s3.handler;
 
-import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import java.time.Duration;
-
 import com.example.s3.config.S3Config;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+
+import java.time.Duration;
 
 public class GeneratePresignedUrl {
 
