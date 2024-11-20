@@ -23,27 +23,34 @@ public class GeneratePresignedUrlHandler implements RequestHandler<APIGatewayPro
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
 
-        if (BUCKET_NAME == null || BUCKET_NAME.isEmpty()) {
-            return response
-                    .withStatusCode(500)
-                    .withBody("{\"error\": \"Bucket name not set on environment variable\"}");
-        }
-
-        if (input == null || input.getQueryStringParameters() == null) {
-            return response
-                    .withStatusCode(400)
-                    .withBody("{\"error\": \"Request is missing\"}");
-        }
-
-        FileRequest fileRequest = FileRequest.from(input);
-        String filename = fileRequest.getFilename();
-
-        if (filename == null || filename.trim().isEmpty()) {
-            return response
-                    .withStatusCode(400)
-                    .withBody("{\"error\": \"Invalid input: filename required\"}");
-        }
         try {
+
+            if (input == null) {
+                return response
+                        .withStatusCode(400)
+                        .withBody("{\"error\": \"Request is missing\"}");
+            }
+
+            if (BUCKET_NAME == null || BUCKET_NAME.isEmpty()) {
+                return response
+                        .withStatusCode(500)
+                        .withBody("{\"error\": \"Bucket name not set on environment variable\"}");
+            }
+
+            if (input.getQueryStringParameters() == null) {
+                return response
+                        .withStatusCode(400)
+                        .withBody("{\"error\": \"Request is missing\"}");
+            }
+
+            FileRequest fileRequest = FileRequest.from(input);
+            String filename = fileRequest.getFilename();
+
+            if (filename == null || filename.trim().isEmpty()) {
+                return response
+                        .withStatusCode(400)
+                        .withBody("{\"error\": \"Invalid input: filename required\"}");
+            }
 
             String presignedUrl = GeneratePresignedUrl.generatePresignedUrl(BUCKET_NAME, filename);
             String output = String.format("{\"upload_url\": \"%s\"}", presignedUrl);
@@ -67,5 +74,6 @@ public class GeneratePresignedUrlHandler implements RequestHandler<APIGatewayPro
                     .withBody("{\"error\": \"Failed to generate presigned URL\"}");
         }
     }
+
 }
 
