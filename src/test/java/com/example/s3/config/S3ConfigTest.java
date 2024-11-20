@@ -1,12 +1,11 @@
 package com.example.s3.config;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 
-
-public class S3ConfigTest {
-
-    @Test
-    public void testCreatePresigner() {
-
+class S3ConfigTest {
+    @BeforeEach
+    void setUp() {
+        // Optional setup if needed
     }
+
 }
